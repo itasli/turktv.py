@@ -5,7 +5,7 @@ trt_router = APIRouter(prefix="/trt", tags=["TRT Channels"])
 
 @ChannelRegistry.register_channel(
     name='TRT 1', 
-    logo='http://example.com/trt1-logo.png',
+    logo='https://i.ibb.co/xzSz0Pt/trt-1-tr.png',
     order=0
 )
 @trt_router.get("/trt1", name='TRT 1')
@@ -15,7 +15,7 @@ def resolve_trt1():
 
 @ChannelRegistry.register_channel(
     name='TRT Diyanet Çocuk', 
-    logo='http://example.com/trt2-logo.png',
+    logo='https://i.ibb.co/k4rqCkb/trt-diyanet-cocuk.jpg',
     order=11.0
 )
 @trt_router.get("/trtdiyanetcocuk", name='TRT Diyanet Çocuk')
@@ -24,13 +24,33 @@ def resolve_trtdiyanetcocuk():
 
 
 @ChannelRegistry.register_channel(
+    name='TRT Çocuk', 
+    logo='https://i.ibb.co/4tHc4fD/trt-cocuk-tr.png',
+    order=11.0
+)
+@trt_router.get("/trtcocuk", name='TRT Diyanet Çocuk')
+def resolve_trtcocuk():
+    return 'http://tv-trtcocuk.medya.trt.com.tr/master.m3u8'
+
+
+@ChannelRegistry.register_channel(
     name='TRT Haber', 
-    logo='http://example.com/trthaber-logo.png',
+    logo='https://i.ibb.co/3kSXjwk/trt-haber-tr.png',
     order=2
 )
 @trt_router.get("/trthaber", name='TRT Haber')
 def resolve_trthaber():
     return 'https://tv-trthaber.medya.trt.com.tr/master.m3u8'
+
+
+@ChannelRegistry.register_channel(
+    name='TRT Belgesel', 
+    logo='https://i.ibb.co/pLNT9hC/trt-belgesel-tr.png',
+    order=2
+)
+@trt_router.get("/trtbelgesel", name='TRT Belgesel')
+def resolve_trtbelgesel():
+    return 'https://tv-trtbelgesel.medya.trt.com.tr/master.m3u8'
 
 
 @trt_router.get("/channel/{channel_name}")
