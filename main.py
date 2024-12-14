@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Response, Request
-from routers import trt_router
+from routers import trt_router, turkuvaz_router
 from utils import ChannelRegistry, generate_playlist
 
-app = FastAPI(title="IPTV Channel API")
+app = FastAPI(title="turktv.py")
 
 # Register routers
 app.include_router(trt_router)
+app.include_router(turkuvaz_router)
 
 
 @app.get("/")
@@ -27,3 +28,16 @@ async def get_playlist(r : Request):
     
     # Return playlist_content
     return Response(playlist_content, media_type='application/x-mpegurl', headers={'Content-Disposition': 'attachment; filename=playlist.m3u'})
+
+@app.get("/channel/{channel_name}")
+async def get_channel(channel_name: str):
+    """
+    Get specific channel details
+
+    :param channel_name: Channel name
+    :return: Channel information
+    """
+    channel = ChannelRegistry.get_channel(channel_name)
+    if channel:
+        return channel
+    return {"error": "Channel not found"}
