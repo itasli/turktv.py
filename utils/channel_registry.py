@@ -1,5 +1,7 @@
-import functools
-from typing import Dict, Any, Callable, Optional
+import unicodedata
+from typing import Dict, Any, Optional
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import RedirectResponse
 
 class ChannelRegistry:
     """
@@ -15,7 +17,7 @@ class ChannelRegistry:
         :param name: Channel name
         :return: Normalized key
         """
-        return name.lower().replace(' ', '_')
+        return unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode('utf-8').lower().replace(' ', '_')
 
     @classmethod
     def update_resolvers(cls, router):
@@ -31,32 +33,40 @@ class ChannelRegistry:
                 cls._channels[cls._normalize_key(route.name)]['resolver'] = route.path
 
     @classmethod
-    def register_channel(cls, name: str, logo: Optional[str] = None, order: float = 0.0):
+    def register_channel(cls, name: str, logo: Optional[str] = None, order: float = 0.0, url: str = "", router: Optional[APIRouter] = None):
         """
-        Decorator to automatically register a channel
+        Registers a channel and creates an endpoint
         
         :param name: Channel name
         :param logo: Logo URL (optional)
         :param order: Order of the channel (optional)
-        :return: Decorator
+        :param url: URL of the channel (optional)
+        :param router: FastAPI router (optional)
         """
-        def decorator(func: Callable):
-            @functools.wraps(func)
-            def wrapper(*args, **kwargs):
-                return func(*args, **kwargs)
-            
-            # Unique key based on the name (normalized)
-            key = cls._normalize_key(name)
-            
-            # Registering channel metadata
-            cls._channels[key] = {
-                'name': name,
-                'logo': logo,
-                'order': order,
-            }
-            
-            return wrapper
-        return decorator
+        # Unique key based on the name (normalized)
+        key = cls._normalize_key(name)
+        
+        def endpoint():
+            try:
+                return RedirectResponse(url=url)
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=str(e))
+        
+        # Register channel metadata
+        cls._channels[key] = {
+            'name': name,
+            'logo': logo,
+            'order': order,
+        }
+
+        # Add route to router if provided
+        if router:
+            router.add_api_route(
+                path=f"/{key}",
+                endpoint=endpoint,
+                name=name,
+                response_class=RedirectResponse
+            )
 
     @classmethod
     def get_channels(cls, sort_by_order: bool = True) -> Dict[str, Dict[str, Any]]:
@@ -69,7 +79,6 @@ class ChannelRegistry:
         if sort_by_order:
             return dict(sorted(cls._channels.items(), key=lambda x: x[1]['order']))
         return cls._channels.copy()
-
 
     @classmethod
     def get_channel(cls, channel_name: str) -> Optional[Dict[str, Any]]:
