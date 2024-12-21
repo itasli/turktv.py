@@ -1,6 +1,6 @@
 [project]
 name = "turktv-py"
-version = "0.1.0"
+version = "0.1.1"
 description = "A REST API built with FastAPI to manage Turkish live streams"
 readme = "README.md"
 requires-python = ">=3.13"
