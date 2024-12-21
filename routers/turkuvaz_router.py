@@ -67,4 +67,5 @@ ChannelRegistry.register_channel(
     router=turkuvaz_router
 )
 
+
 ChannelRegistry.update_resolvers(turkuvaz_router)

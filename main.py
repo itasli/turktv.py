@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Response, Request
-from routers import trt_router, turkuvaz_router
+from routers import trt_router, turkuvaz_router, cinergroup_router
 from utils import ChannelRegistry, generate_playlist
 
 app = FastAPI(title="turktv.py")
@@ -7,6 +7,7 @@ app = FastAPI(title="turktv.py")
 # Register routers
 app.include_router(trt_router)
 app.include_router(turkuvaz_router)
+app.include_router(cinergroup_router)
 
 
 @app.get("/")

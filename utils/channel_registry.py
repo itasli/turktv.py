@@ -33,7 +33,7 @@ class ChannelRegistry:
                 cls._channels[cls._normalize_key(route.name)]['resolver'] = route.path
 
     @classmethod
-    def register_channel(cls, name: str, logo: Optional[str] = None, order: float = 0.0, url: str = "", router: Optional[APIRouter] = None):
+    def register_channel(cls, name: str, logo: Optional[str] = None, order: float = 0, url: Optional[str] = None, router: Optional[APIRouter] = None, disabled = False):
         """
         Registers a channel and creates an endpoint
         
@@ -42,7 +42,11 @@ class ChannelRegistry:
         :param order: Order of the channel (optional)
         :param url: URL of the channel (optional)
         :param router: FastAPI router (optional)
+        :param disabled: Disable the channel (optional)
         """
+        if disabled:
+            return
+
         # Unique key based on the name (normalized)
         key = cls._normalize_key(name)
         
