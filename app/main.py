@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Response, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from routers import trt_router, turkuvaz_router, cinergroup_router
+from routers import trt_router, turkuvaz_router, cinergroup_router, demiroren_router, dogus_router
 from utils import ChannelRegistry, generate_playlist
 
 app = FastAPI(title="turktv.py")
@@ -10,6 +10,8 @@ app = FastAPI(title="turktv.py")
 app.include_router(trt_router)
 app.include_router(turkuvaz_router)
 app.include_router(cinergroup_router)
+app.include_router(demiroren_router)
+app.include_router(dogus_router)
 
 # Register static files
 app.mount("/public", StaticFiles(directory="public"), name="public")
