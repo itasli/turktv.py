@@ -16,8 +16,13 @@ app.mount("/public", StaticFiles(directory="public"), name="public")
 
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def read_root():
+    """
+    Root endpoint
+
+    :return: Hello World
+    """
+    return Response(content="Hello World", media_type='text/html')
 
 @app.get("/favicon.ico")
 async def get_favicon():
