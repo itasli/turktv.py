@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Response, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from routers import trt_router, turkuvaz_router, cinergroup_router, demiroren_router, dogus_router
-from utils import ChannelRegistry, generate_playlist
+from .routers import trt_router, turkuvaz_router, cinergroup_router, demiroren_router, dogus_router
+from .utils import ChannelRegistry, generate_playlist
 
 app = FastAPI(title="turktv.py")
 
@@ -18,7 +18,7 @@ app.mount("/public", StaticFiles(directory="public"), name="public")
 
 
 @app.get("/")
-async def read_root():
+async def root():
     """
     Root endpoint
 

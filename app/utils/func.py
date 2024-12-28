@@ -1,6 +1,7 @@
-import requests
+import httpx
 import re
 
+# TODO: refactor all function into one function
 def get_turkuvaz_stream(key):
     """
     Fetch stream URL for a given key from the video token service.
@@ -16,7 +17,7 @@ def get_turkuvaz_stream(key):
     }
     
     # Send GET request
-    response = requests.get(url, headers=headers)
+    response = httpx.get(url, headers=headers)
     
     # Remove backslashes from the response
     data = response.text.replace('\\', '')
@@ -46,7 +47,7 @@ def get_cinergroup_stream(url, pattern):
     }
     
     # Send GET request
-    response = requests.get(url, headers=headers)
+    response = httpx.get(url, headers=headers)
     
     # Remove backslashes from the response
     data = response.text.replace('\\', '')

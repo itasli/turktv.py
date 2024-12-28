@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from utils import ChannelRegistry
+from app.utils import ChannelRegistry
 
 dogus_router = APIRouter(prefix="/dogus", tags=["Dogus Channels"])
 
@@ -11,6 +11,7 @@ ChannelRegistry.register_channel(
     router=dogus_router
 )
 
+# TODO: token is dynamic, need to request it from the website
 ChannelRegistry.register_channel(
     name='Eurostar', 
     logo='https://i.ibb.co/ZWpVp8V/euro-star-tr.png',

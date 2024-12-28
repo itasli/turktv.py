@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from utils import ChannelRegistry, get_turkuvaz_stream
+from app.utils import ChannelRegistry, get_turkuvaz_stream
 
 turkuvaz_router = APIRouter(prefix="/turkuvaz", tags=["Turkuvaz Channels"])
 

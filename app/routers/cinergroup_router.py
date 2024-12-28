@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from utils import ChannelRegistry, get_cinergroup_stream
+from app.utils import ChannelRegistry, get_cinergroup_stream
 
 cinergroup_router = APIRouter(prefix="/cinergroup", tags=["Cinergroup Channels"])
 

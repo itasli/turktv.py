@@ -1,0 +1,7 @@
+services:
+  turktv:
+    image: ghcr.io/itasli/turktv.py:latest
+    container_name: turktv
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

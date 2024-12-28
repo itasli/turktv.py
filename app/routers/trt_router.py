@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from utils import ChannelRegistry
+from app.utils import ChannelRegistry
 
 trt_router = APIRouter(prefix="/trt", tags=["TRT Channels"])
 

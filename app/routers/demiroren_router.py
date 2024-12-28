@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from utils import ChannelRegistry
+from app.utils import ChannelRegistry
 
 demiroren_router = APIRouter(prefix="/demiroren", tags=["Demiroren Channels"])
 
