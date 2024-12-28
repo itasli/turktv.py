@@ -1,10 +1,11 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  workflow_run:
+    workflows:
+      - Python Tests CI
+    types:
+      - completed
 
 env:
   REGISTRY: ghcr.io
@@ -45,3 +46,13 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: Login to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+        
+      - name: Trigger webhook
+        run: curl -X POST ${{ secrets.WEBHOOK_URL }}
