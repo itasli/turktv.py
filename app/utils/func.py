@@ -1,50 +1,31 @@
 import httpx
 import re
 
-# TODO: refactor all function into one function
-def get_turkuvaz_stream(key):
+def get_stream_url(url: str, pattern: str = "", is_turkuvaz: bool = False) -> str:
     """
-    Fetch stream URL for a given key from the video token service.
+    Unified function to fetch stream URLs from different sources.
     
-    :param key: Stream key
-    :return: Stream URL
+    :url (str): The base URL to fetch from. For Turkuvaz streams, this should be the stream key.
+    :pattern (str): Regex pattern to extract the stream URL.
+    :is_turkuvaz (bool): If True, treats the url parameter as a Turkuvaz stream key.
+    :return (str): The stream URL.
     """
-    url = f"http://videotoken.tmgrup.com.tr/webtv/secure?url=http://trkvz-live.ercdn.net/{key}/{key}.m3u8"
+    # Handle Turkuvaz URL construction
+    if is_turkuvaz:
+        url = f"http://videotoken.tmgrup.com.tr/webtv/secure?url=http://trkvz-live.ercdn.net/{url}/{url}.m3u8"
+        pattern = r'"Url":"(.*?)"' if pattern == "" else pattern
     
+    # Set default headers if none provided
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-        'Referer': 'https://www.atv.com.tr/canli-yayin',
     }
     
-    # Send GET request
-    response = httpx.get(url, headers=headers)
-    
-    # Remove backslashes from the response
-    data = response.text.replace('\\', '')
-    
-    # Use regex to find the stream URL
-    pattern = r'"Url":"(.*?)"'
-    match = re.search(pattern, data)
-    
-    if match and match.group(1):
-        stream_url = match.group(1)
-        return stream_url
-    
-    raise Exception('Stream URL not found')
-
-def get_cinergroup_stream(url, pattern):
-    """
-    Fetch stream URL from a given URL using a specific pattern.
-    
-    :param url: URL to fetch
-    :param pattern: Regex pattern to search for
-    :return: Stream URL
-    """
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-        'Origin': url,
-        'Referer': url,
-    }
+    # Add referer based on the type of stream
+    if is_turkuvaz:
+        headers['Referer'] = 'https://www.atv.com.tr/canli-yayin'
+    else:
+        headers['Origin'] = url
+        headers['Referer'] = url
     
     # Send GET request
     response = httpx.get(url, headers=headers)
@@ -58,5 +39,5 @@ def get_cinergroup_stream(url, pattern):
     if match and match.group(1):
         stream_url = match.group(1)
         return stream_url
-    
+        
     raise Exception('Stream URL not found')
