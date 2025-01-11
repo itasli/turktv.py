@@ -1,7 +1,7 @@
 import httpx
 import re
 
-def get_stream_url(url: str, pattern: str = "", is_turkuvaz: bool = False) -> str:
+def get_stream_url(url: str, pattern: str = "", is_turkuvaz: bool = False, verify: bool = True) -> str:
     """
     Unified function to fetch stream URLs from different sources.
     
@@ -28,7 +28,7 @@ def get_stream_url(url: str, pattern: str = "", is_turkuvaz: bool = False) -> st
         headers['Referer'] = url
     
     # Send GET request
-    response = httpx.get(url, headers=headers)
+    response = httpx.get(url, headers=headers, verify)
     
     # Remove backslashes from the response
     data = response.text.replace('\\', '')
