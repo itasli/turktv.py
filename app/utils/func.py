@@ -28,7 +28,7 @@ def get_stream_url(url: str, pattern: str = "", is_turkuvaz: bool = False, verif
         headers['Referer'] = url
     
     # Send GET request
-    response = httpx.get(url, headers=headers, verify)
+    response = httpx.get(url, headers=headers, verify=verify)
     
     # Remove backslashes from the response
     data = response.text.replace('\\', '')
